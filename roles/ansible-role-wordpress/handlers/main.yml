@@ -1,0 +1,14 @@
+# roles/wordpress/handlers/main.yml
+---
+
+- name: restart wordpress
+  become: yes
+  service:
+    name: wordpress
+    state: restarted
+
+- name: restart firewalld
+  become: yes
+  service:
+    name: firewalld
+    state: restarted

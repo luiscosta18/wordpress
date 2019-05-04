@@ -1,0 +1,22 @@
+- hosts: db
+  become: true
+  roles:
+  - role: ansible-role-mariadb
+  
+  vars_files:
+    - "inv_vars/{{ inventory }}/all.yml"
+  
+  vars:
+    mariadb_bind_address: '0.0.0.0'
+    mariadb_root_password: 'test'
+
+    mariadb_databases:
+    - name: "{{db_name}}"
+
+    mariadb_users:
+    - name: "{{db_user}}"
+      password: "{{db_pass}}"
+      priv: '*.*:ALL,GRANT'
+      append_privs: 'yes'
+      host: '192.168.33.%'
+

@@ -1,0 +1,12 @@
+- hosts: appservers
+  become: true
+  roles:
+  - role: ansible-role-wordpress
+
+  vars_files:
+    - "inv_vars/{{ inventory }}/all.yml"
+
+  vars:
+    wordpress_database_host: '192.168.33.11'
+
+ 

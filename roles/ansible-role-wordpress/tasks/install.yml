@@ -1,0 +1,33 @@
+# roles/wordpress/tasks/install.yml
+---
+
+- name: Ensure repository is installed
+  become: yes
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ wordpress_repository }}"
+  tags: wordpress
+
+- name: Check whether Apache is already installed
+  become: yes
+  stat:
+    path: "{{ wordpress_httpd_service }}"
+  register: wordpress_httpd_status
+  failed_when: not wordpress_httpd_status.stat.exists
+  tags: wordpress
+
+- name: Install Wordpress
+  become: yes
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ wordpress_packages }}"
+  tags: wordpress
+
+- name: Install libsemanage-python
+  become: yes
+  package:
+    name: libsemanage-python
+    state: installed
+  when: ansible_selinux.status == 'enabled' and wordpress_database_host != 'localhost'
